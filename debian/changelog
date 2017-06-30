@@ -1,0 +1,11 @@
+qt59base (5.9.0-1bb1) xenial; urgency=low
+
+  * Final release
+
+ -- KOVACS Kriszitan <hidden@balabit.com>  Fri, 30 Jun 2017 10:51:26 +0200
+
+qt59base (5.9.0~beta-1basyskom1) xenial; urgency=low
+
+  * Initial package
+
+ -- Stephan Binner <stephan.binner@basyskom.com>  Fri, 07 Apr 2017 12:00:00 +0000

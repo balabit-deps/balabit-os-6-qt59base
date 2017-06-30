@@ -1,0 +1,41 @@
+Source: qt59base
+Section: libs
+Priority: extra
+Maintainer: Zoltán Balogh <zoltan@bakter.hu>
+Build-Depends: debhelper (>= 8.0.0), 
+               autotools-dev,
+               libdbus-1-3,
+               libdbus-1-dev,
+               libssl-dev,
+               libudev-dev,
+               libfontconfig1-dev,
+               libicu-dev,
+               pkg-config,
+               libatspi2.0-dev,
+               libmtdev-dev,
+               libharfbuzz-dev,
+               libjsoncpp-dev,
+               re2c,
+               libevent-dev,
+Standards-Version: 3.9.2
+Homepage: http://www.qt-project.org
+
+Package: qt59base
+Architecture: any
+Depends: fontconfig, ${shlibs:Depends}, ${misc:Depends}
+Description: Qt 5.9.0 Base modules.
+ <insert long description, indented with spaces>
+
+Package: qt59base-dev
+Architecture: any
+Depends: qt59base (= ${binary:Version}), ${misc:Depends}
+Description: Qt 5.9.0 development headers and libs
+ <>
+
+Package: qt59base-dbg
+Architecture: amd64
+Section: debug
+Priority: extra
+Depends: qt59base (= ${binary:Version}), ${misc:Depends}
+Description: Debugging informat for qt59base
+ This package contains the debugging symbols for qt59base module

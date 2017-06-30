@@ -1,0 +1,10 @@
+opt/qt59/bin
+opt/qt59/doc
+opt/qt59/include
+opt/qt59/lib/*.a
+opt/qt59/lib/*.la
+opt/qt59/lib/*.prl
+opt/qt59/lib/cmake
+opt/qt59/lib/pkgconfig
+opt/qt59/mkspecs
+debian/qt59-env.sh /opt/qt59/bin/
