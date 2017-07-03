@@ -870,13 +870,15 @@ void QWindowsBaseWindow::hide_sys() // Normal hide, do not activate other window
 void QWindowsBaseWindow::raise_sys()
 {
     qCDebug(lcQpaWindows) << __FUNCTION__ << this << window();
-    SetWindowPos(handle(), HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+    if ((window()->flags() & (Qt::WindowStaysOnTopHint | Qt::WindowStaysOnBottomHint)) == 0)
+        SetWindowPos(handle(), HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
 }
 
 void QWindowsBaseWindow::lower_sys()
 {
     qCDebug(lcQpaWindows) << __FUNCTION__ << this << window();
-    SetWindowPos(handle(), HWND_BOTTOM, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+    if ((window()->flags() & (Qt::WindowStaysOnTopHint | Qt::WindowStaysOnBottomHint)) == 0)
+        SetWindowPos(handle(), HWND_BOTTOM, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
 }
 
 void QWindowsBaseWindow::setWindowTitle_sys(const QString &title)
@@ -1152,7 +1154,7 @@ void QWindowsWindow::setDropSiteEnabled(bool dropEnabled)
     if (isDropSiteEnabled() == dropEnabled)
         return;
     qCDebug(lcQpaMime) << __FUNCTION__ << window() << dropEnabled;
-#if !defined(QT_NO_CLIPBOARD) && !defined(QT_NO_DRAGANDDROP)
+#if QT_CONFIG(clipboard) && QT_CONFIG(draganddrop)
     if (dropEnabled) {
         Q_ASSERT(m_data.hwnd);
         m_dropTarget = new QWindowsOleDropTarget(window());
@@ -1616,6 +1618,16 @@ static inline bool dwmIsCompositionEnabled()
     return SUCCEEDED(DwmIsCompositionEnabled(&dWmCompositionEnabled)) && dWmCompositionEnabled == TRUE;
 }
 
+static inline bool isSoftwareGl()
+{
+#if QT_CONFIG(dynamicgl)
+    return QOpenGLStaticContext::opengl32.moduleIsNotOpengl32()
+        && QOpenGLContext::openGLModuleType() == QOpenGLContext::LibGL;
+#else
+    return false;
+#endif // dynamicgl
+}
+
 bool QWindowsWindow::handleWmPaint(HWND hwnd, UINT message,
                                          WPARAM, LPARAM)
 {
@@ -1627,15 +1639,10 @@ bool QWindowsWindow::handleWmPaint(HWND hwnd, UINT message,
         return false;
     PAINTSTRUCT ps;
 
-#if QT_CONFIG(dynamicgl)
-    // QTBUG-58178: GL software rendering needs InvalidateRect() to suppress
-    // artifacts while resizing.
-    if (testFlag(OpenGLSurface)
-        && QOpenGLStaticContext::opengl32.moduleIsNotOpengl32()
-        && QOpenGLContext::openGLModuleType() == QOpenGLContext::LibGL) {
+    // GL software rendering (QTBUG-58178) and Windows 7/Aero off with some AMD cards
+    // (QTBUG-60527) need InvalidateRect() to suppress artifacts while resizing.
+    if (testFlag(OpenGLSurface) && (isSoftwareGl() || !dwmIsCompositionEnabled()))
         InvalidateRect(hwnd, 0, false);
-    }
-#endif // dynamicgl
 
     BeginPaint(hwnd, &ps);
 

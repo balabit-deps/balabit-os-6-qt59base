@@ -3195,9 +3195,6 @@ void tst_QWidget::restoreVersion1Geometry()
     widget.showNormal();
     QTest::qWait(10);
 
-    if (m_platform == QStringLiteral("xcb"))
-        QSKIP("QTBUG-26421");
-
     if (expectedWindowState != Qt::WindowNoState) {
         // restoring from maximized or fullscreen, we can only restore to the normal geometry
         QTRY_COMPARE(widget.geometry(), expectedNormalGeometry);
@@ -8526,8 +8523,8 @@ void tst_QWidget::translucentWidget()
     else
 #endif
         widgetSnapshot = label.grab(QRect(QPoint(0, 0), label.size()));
-    QImage actual = widgetSnapshot.toImage().convertToFormat(QImage::Format_RGB32);
-    QImage expected = pm.toImage().convertToFormat(QImage::Format_RGB32);
+    const QImage actual = widgetSnapshot.toImage().convertToFormat(QImage::Format_RGB32);
+    const QImage expected = pm.toImage().scaled(label.devicePixelRatioF() * pm.size());
     QCOMPARE(actual.size(),expected.size());
     QCOMPARE(actual,expected);
 }
