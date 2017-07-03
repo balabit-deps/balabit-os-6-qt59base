@@ -24,7 +24,9 @@
 #endif
 #include "qcolordialog.h"
 #include "qcolormap.h"
+#if QT_CONFIG(columnview)
 #include "qcolumnview.h"
+#endif
 #include "qcombobox.h"
 #if QT_CONFIG(commandlinkbutton)
 #include "qcommandlinkbutton.h"
@@ -86,7 +88,9 @@
 #endif
 #include "qlayout.h"
 #include "qlayoutitem.h"
+#if QT_CONFIG(lcdnumber)
 #include "qlcdnumber.h"
+#endif
 #include "qlineedit.h"
 #include "qlistview.h"
 #include "qlistwidget.h"
@@ -124,7 +128,9 @@
 #include "qsizepolicy.h"
 #include "qslider.h"
 #include "qspinbox.h"
+#if QT_CONFIG(splashscreen)
 #include "qsplashscreen.h"
+#endif
 #include "qsplitter.h"
 #include "qstackedlayout.h"
 #include "qstackedwidget.h"

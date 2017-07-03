@@ -326,7 +326,7 @@ defineTest(qtConfParseCommandLine) {
 }
 
 defineReplace(qtConfToolchainSupportsFlag) {
-    test_out_dir = $$shadowed($$QMAKE_CONFIG_TESTS_DIR)
+    test_out_dir = $$OUT_PWD/$$basename(QMAKE_CONFIG_TESTS_DIR)
     test_cmd_base = "$$QMAKE_CD $$system_quote($$system_path($$test_out_dir)) &&"
 
     conftest = "int main() { return 0; }"
@@ -581,7 +581,8 @@ defineTest(qtConfLibrary_pkgConfig) {
     version ~= s/[^0-9.].*$//
     $${1}.version = $$first(version)
     export($${1}.version)
-    $${1}.libs = $$libpaths $$libs
+    libpaths += $$libs
+    $${1}.libs = "$$libpaths"
     export($${1}.libs)
     return(true)
 }
@@ -848,7 +849,7 @@ defineTest(qtConfTest_compile) {
     isEmpty(host): host = false
 
     test_dir = $$QMAKE_CONFIG_TESTS_DIR/$$test
-    test_base_out_dir = $$shadowed($$QMAKE_CONFIG_TESTS_DIR)
+    test_base_out_dir = $$OUT_PWD/$$basename(QMAKE_CONFIG_TESTS_DIR)
     test_out_dir = $$test_base_out_dir/$$test
     !isEmpty($${1}.pro): \
         test_dir = $$test_dir/$$eval($${1}.pro)
@@ -1919,8 +1920,10 @@ qtConfCheckErrors()
         for (k, $${currentConfig}.features._KEYS_) {
             pp = $$eval($${currentConfig}.features.$${k}.purpose)
             !isEmpty(pp) {
+                pfx = $$eval($${currentConfig}.features.$${k}.section)
+                !isEmpty(pfx): pfx = "$$pfx: "
                 all_ft += $$qtConfPadCols($$k, ".......................", \
-                                          $$section(pp, $$escape_expand(\\n), 0, 0))
+                                          $$pfx$$section(pp, $$escape_expand(\\n), 0, 0))
             }
         }
     }
