@@ -1,3 +1,9 @@
+qt59base (5.9.1-1bb1) xenial; urgency=low
+
+  * Upgrade to 5.9.1
+
+ -- KOVACS Kriszitan <hidden@balabit.com>  Mon, 03 Jul 2017 09:01:48 +0000
+
 qt59base (5.9.0-1bb1) xenial; urgency=low
 
   * Final release
