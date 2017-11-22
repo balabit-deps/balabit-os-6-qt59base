@@ -1,3 +1,10 @@
+qt59base (5.9.2-1bb1) xenial; urgency=low
+
+  * Upgrade to 5.9.2
+  * Disable warning message in QEvdevKeyboardHanlder when querying LED states fails
+
+ -- KOVACS Kriszitan <hidden@balabit.com>  Wed, 22 Nov 2017 14:11:47 +0100
+
 qt59base (5.9.1-1bb1) xenial; urgency=low
 
   * Upgrade to 5.9.1
